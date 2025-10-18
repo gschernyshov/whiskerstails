@@ -1,0 +1,167 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String    @id @default(uuid())
+  name       String
+  avatar     String
+  telephone  String
+  email      String    @unique
+  password   String
+  status     String
+  role       String
+
+  pets       Pet[]
+  likes      Like[]
+  comments   Comment[]
+  favorites  Favorite[]
+
+  accounts   Account[]
+  sessions   Session[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")  
+
+  @@map("users")
+}
+
+model Pet {
+  id            String   @id @default(uuid())
+  photo         String
+  nameCity      String   @map("name_city")
+  location      String
+  species       String   
+  gender        String   
+  age           Int
+  description   String
+  status        String   
+
+  userId        String   @map("user_id")
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  likes         Like[]
+  comments      Comment[]
+  favorites     Favorite[]
+
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")  
+
+  @@map("pets")
+}
+
+
+model Like {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId     String   @map("pet_id")
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at") 
+
+  @@map("likes")
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  content   String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId    String   @map("user_id")
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+  petId     String   @map("pet_id")
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at") 
+
+   @@map("comments") 
+}
+
+model Favorite {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  petId     String   @map("pet_id")
+  pet       Pet      @relation(fields: [petId], references: [id], onDelete: Cascade)
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")  
+
+  @@map("favorites")
+}
+
+model City {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  shelters  Shelter[]
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")  
+
+  @@map("cities")
+}
+
+model Shelter {
+  id           String   @id @default(uuid())
+  nameCity     String   @map("name_city")
+  locality     String
+  nameShelter  String   @map("name_shelter")
+  address      String  
+  contacts     String
+  site         String
+  comments     String
+
+  cityId    String   @map("city_id")
+  city      City     @relation(fields: [cityId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")  
+
+  @@map("shelters")
+}
+
+model Account {
+  id                 String  @id @default(cuid())
+  userId             String  @map("user_id")
+  type               String
+  provider           String
+  providerAccountId  String  @map("provider_account_id")
+  refresh_token      String? @db.Text
+  access_token       String? @db.Text
+  expires_at         Int?
+  token_type         String?
+  scope              String?
+  id_token           String? @db.Text
+  session_state      String?
+ 
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
+}
+ 
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique @map("session_token")
+  userId       String   @map("user_id")
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+ 
+  @@map("sessions")
+}
+ 
+model VerificationToken {
+  identifier String
+  token      String
+  expires    DateTime
+ 
+  @@unique([identifier, token])
+  @@map("verification_tokens")
+}

@@ -1,0 +1,98 @@
+@import "tailwindcss";
+@plugin './hero.ts';
+@source '../../node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}';
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #cedefa;
+  --foreground: #171717;
+}
+
+@theme {
+  --font-nunito: var(--font-nunito);
+  --font-inter: var(--font-inter);
+  --color-transparent-blue: #0273E620; 
+  --color-dark-blue: #0F2851;
+  --color-nav-item: var(--color-gray-500);
+  --color-active-nav-item: black;
+  --color-title-add-pet: black;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --font-sans: var(--font-inter);     
+  --font-heading: var(--font-nunito); 
+  --font-mono: var(--font-geist-mono);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #1a3e77;
+    --foreground: #ededed;
+    --color-nav-item: var(--color-gray-400);
+    --color-active-nav-item: white;
+  }
+
+  @media (max-width: 768px) {
+    :root {
+      --color-title-add-pet: white;
+    }
+  }
+
+  form span:not(.checkbox span), 
+  label, 
+  input,
+  select,
+  textarea {
+    color: #171717 !important;
+  }
+
+  .bg-default-200\/50 {
+    background-color: color-mix(in oklab, #1a3e77 50%, transparent);
+  }
+
+  .after\:bg-background:after {
+    background: white;
+  }
+
+  .dark-scheme-button-white {
+    color: white !important;
+    border: 1.5px solid white !important;
+  }
+}
+
+html {
+  background: var(--background);
+}
+
+body {
+  background: var(--background);
+  font-family: var(--font-inter), sans-serif;
+  color: var(--foreground);
+}
+
+h1, h2, h3, h4, h5, h6, button {
+  font-family: var(--font-nunito);
+}
+
+@supports (-webkit-touch-callout: none) {
+  input,
+  select,
+  textarea {
+    font-size: 16px !important;
+  }
+}
+
+.nav-item {
+  color: var(--color-nav-item);
+}
+
+.active-nav-item {
+  color: var(--color-active-nav-item);
+}
+
+.title-add-pet {
+  color: var(--color-title-add-pet);
+}
