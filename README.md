@@ -28,7 +28,7 @@
 
 ## ⚙️ Настройки окружения
 
-Проект использует **Prisma**, **NextAuth** и **Nodemailer*, поэтому для запуска нужно создать `.env`  и `.local.env`в корне проекта с примерно такими переменными:
+Проект использует **Prisma**, **NextAuth** и **Nodemailer**, поэтому для запуска нужно создать `.env`  и `.local.env`в корне проекта с примерно такими переменными:
 
 ```env
 DATABASE_URL="prisma+postgres://accelerate.prisma-data.net/?api_key=your_api_key"
