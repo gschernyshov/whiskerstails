@@ -41,6 +41,7 @@ AUTH_SECRET="your_auth_secret"
 YANDEX_USER="your_email@example.com"
 YANDEX_PASS="your_email_password"
 ```
+
 ---
 
 ## 📦 Команды для запуска и сборки
